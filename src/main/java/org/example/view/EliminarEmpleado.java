@@ -8,4 +8,11 @@ private javax.swing.JPanel contentPane;
     private JComboBox cboxEliminarEmpleado;
     private JButton btnEliminarEmpleado;
 
+
+    public EliminarEmpleado() {
+        setContentPane(contentPane);
+        setModal(true);
+
+        btnVolver.addActionListener(e -> dispose());
+    }
 }

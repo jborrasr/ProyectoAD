@@ -12,5 +12,7 @@ public class HorasTrabajadas extends JDialog {
     public HorasTrabajadas() {
         setContentPane(contentPane);
         setModal(true);
+
+        btnVolver.addActionListener(e -> dispose());
     }
 }

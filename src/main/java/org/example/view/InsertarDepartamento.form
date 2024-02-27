@@ -73,20 +73,20 @@
                     </constraints>
                     <properties/>
                   </component>
-                  <component id="844f6" class="javax.swing.JButton" binding="btnCancelar">
-                    <constraints>
-                      <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Cancelar"/>
-                    </properties>
-                  </component>
                   <component id="f23d9" class="javax.swing.JButton" binding="btnInsertarDepartamento">
                     <constraints>
                       <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Insertar"/>
+                    </properties>
+                  </component>
+                  <component id="6753a" class="javax.swing.JButton" binding="btnVolver">
+                    <constraints>
+                      <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Volver"/>
                     </properties>
                   </component>
                 </children>

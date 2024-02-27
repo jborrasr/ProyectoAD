@@ -7,11 +7,13 @@ public class Registros extends JDialog {
     private JTextField txt_FechaEntrada;
     private JTextField txt_FechaSalida;
     private JButton btnFichar;
-    private JButton btnCancelar;
     private JComboBox cboxDni;
+    private JButton btnVolver;
 
     public Registros() {
         setContentPane(contentPane);
         setModal(true);
+
+        btnVolver.addActionListener(e -> dispose());
     }
 }

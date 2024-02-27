@@ -18,7 +18,7 @@ public class empleados {
     @Column(name = "apellidos")
     private String apellidos;
 
-    @Column(name = "dni")
+    @Column(unique = true, name = "dni")
     private String dni;
 
     @Column(name = "telefono")

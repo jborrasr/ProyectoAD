@@ -11,5 +11,7 @@ private javax.swing.JPanel contentPane;
     public EliminarDepartamento() {
         setContentPane(contentPane);
         setModal(true);
+
+        btnVolver.addActionListener(e -> dispose());
     }
 }

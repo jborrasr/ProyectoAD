@@ -14,6 +14,12 @@ private javax.swing.JPanel contentPane;
     private JTextField txt_Cargo;
     private JComboBox cbox_Departamento;
     private JButton btnModificarEmpleado;
-    private JButton btnCancelar;
+    private JButton btnVolver;
 
+    public ModificarEmpleados() {
+        setContentPane(contentPane);
+        setModal(true);
+
+        btnVolver.addActionListener(e -> dispose());
+    }
 }
