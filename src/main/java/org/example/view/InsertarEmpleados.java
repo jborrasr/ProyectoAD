@@ -9,94 +9,140 @@ import org.hibernate.Transaction;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.List;
 
 public class InsertarEmpleados extends JDialog {
     private JPanel contentPane;
-    private JButton btnInsertar;
+    private JButton btnInsertarEmpleado;
     private JTextField txt_Nombre;
     private JTextField txt_Apellidos;
-    private JTextField txt_DNI;
+    private JTextField txt_Dni;
     private JTextField txt_Telefono;
     private JTextField txt_FechaNacimiento;
     private JTextField txt_FechaContratacion;
     private JTextField txt_Salario;
     private JTextField txt_Cargo;
-    private JTextField txt_IdDepartamento;
+    private JComboBox cbox_IdDepartamento;
+
+    private JButton btnVolver;
+
 
     private empleadosController controller;
 
-    public void InsertarEmpleado(empleados empleadoSeleccionado, boolean esInsertar) {
+    public InsertarEmpleados(empleados empleadoSeleccionado, boolean esInsertar) {
         this.controller = new empleadosController();
         setContentPane(contentPane);
         setModal(true);
 
-        btnInsertar.addActionListener(this::actionPerformed);
+        // Obtener y cargar departamentos en el JComboBox
+        cargarDepartamentos();
+
+        btnInsertarEmpleado.addActionListener(this::actionPerformed);
+    }
+
+    public InsertarEmpleados() {
+        // Llama al constructor predeterminado de la clase base
+        super();
+
+        this.controller = new empleadosController();
+        setContentPane(contentPane);
+        setModal(true);
+
+        // Obtener y cargar departamentos en el JComboBox
+        cargarDepartamentos();
+
+        btnInsertarEmpleado.addActionListener(this::actionPerformed);
+        btnVolver.addActionListener(e -> dispose());
+    }
+
+    private void cargarDepartamentos() {
+        List<departamentos> listaDepartamentos = controller.obtenerDepartamentosdesdeBD();
+
+        // Limpiar JComboBox antes de cargar nuevos elementos
+        cbox_IdDepartamento.removeAllItems();
+
+        // Agregar departamentos al JComboBox
+        for (departamentos departamento : listaDepartamentos) {
+            cbox_IdDepartamento.addItem(departamento);
+        }
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btnInsertar) {
-            empleados nuevoEmpleado = new empleados();
-            nuevoEmpleado.setNombre(txt_Nombre.getText());
-            nuevoEmpleado.setApellidos(txt_Apellidos.getText());
-            nuevoEmpleado.setDni(txt_DNI.getText());
-            nuevoEmpleado.setTelefono(txt_Telefono.getText());
+        empleados nuevoEmpleado;
 
-            try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"); // Ajusta el formato según tus necesidades
-
-                Date fechaNacimiento = dateFormat.parse(txt_FechaNacimiento.getText());
-                nuevoEmpleado.setFechaNacimiento(fechaNacimiento);
-
-                Date fechaContratacion = dateFormat.parse(txt_FechaContratacion.getText());
-                nuevoEmpleado.setFechaContratacion(fechaContratacion);
-
-                double salario = Double.parseDouble(txt_Salario.getText());
-                nuevoEmpleado.setSalario(salario);
-            } catch (NumberFormatException | ParseException ex) {
-                JOptionPane.showMessageDialog(null, "Formato de número o fecha inválido");
+        if (e.getSource() == btnInsertarEmpleado) {
+            // Verificar campos vacíos
+            if (camposVacios()) {
+                JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios. Completa todos los campos.");
                 return;
             }
 
+            nuevoEmpleado = new empleados();
 
+            nuevoEmpleado.setNombre(txt_Nombre.getText());
+            nuevoEmpleado.setApellidos(txt_Apellidos.getText());
+            nuevoEmpleado.setDni(txt_Dni.getText());
+            nuevoEmpleado.setTelefono(txt_Telefono.getText());
+
+            String fechaContratacionStr = txt_FechaContratacion.getText();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+            try {
+                LocalDate fechaContratacion = LocalDate.parse(fechaContratacionStr, formatter);
+                nuevoEmpleado.setFechaContratacion(fechaContratacion);
+            } catch (DateTimeParseException ex) {
+                // Mostrar mensaje de error y salir del método
+                JOptionPane.showMessageDialog(this, "Error en el formato de fecha de contratación. Utiliza el formato dd/MM/yyyy");
+                return;
+            }
+
+            String fechaNacimientoStr = txt_FechaNacimiento.getText();
+
+            try {
+                LocalDate fechaNacimiento = LocalDate.parse(fechaNacimientoStr, formatter);
+                nuevoEmpleado.setFechaNacimiento(fechaNacimiento);
+            } catch (DateTimeParseException ex) {
+                // Mostrar mensaje de error y salir del método
+                JOptionPane.showMessageDialog(this, "Error en el formato de fecha de nacimiento. Utiliza el formato dd/MM/yyyy");
+                return;
+            }
+
+            nuevoEmpleado.setSalario(Double.parseDouble(txt_Salario.getText()));
             nuevoEmpleado.setCargo(txt_Cargo.getText());
 
-            // Validaciones adicionales si es necesario...
+            // Obtener el departamento seleccionado del JComboBox
+            departamentos departamentoSeleccionado = (departamentos) cbox_IdDepartamento.getSelectedItem();
+
+            if (departamentoSeleccionado != null) {
+                nuevoEmpleado.setId_departamento(departamentoSeleccionado);
+            } else {
+                // Manejar el caso en el que el elemento seleccionado no sea una instancia de departamentos
+                JOptionPane.showMessageDialog(this, "Error al obtener el departamento seleccionado");
+                return;
+            }
 
             // Llamar al método del controlador para insertar el empleado
             controller.insertarEmpleados(nuevoEmpleado);
         }
     }
 
-
-
-    private void insertarEmpleado(String nombre, String apellidos, String dni, String telefono,
-                                  Date fechaNacimiento, Date fechaContratacion, double salario,
-                                  String cargo, departamentos id_departamento) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
-
-            empleados empleado = new empleados();
-            empleado.setNombre(nombre);
-            empleado.setApellidos(apellidos);
-            empleado.setDni(dni);
-            empleado.setTelefono(telefono);
-            empleado.setFechaNacimiento(fechaNacimiento);
-            empleado.setFechaContratacion(fechaContratacion);
-            empleado.setSalario(salario);
-            empleado.setCargo(cargo);
-            empleado.setId_departamento(id_departamento);
-
-            session.save(empleado);
-
-            transaction.commit();
-            System.out.println("Empleado insertado con éxito.");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private boolean camposVacios() {
+        // Verificar si algún campo está vacío
+        return txt_Nombre.getText().isEmpty() ||
+                txt_Apellidos.getText().isEmpty() ||
+                txt_Dni.getText().isEmpty() ||
+                txt_Telefono.getText().isEmpty() ||
+                txt_FechaContratacion.getText().isEmpty() ||
+                txt_FechaNacimiento.getText().isEmpty() ||
+                txt_Salario.getText().isEmpty() ||
+                txt_Cargo.getText().isEmpty() ||
+                cbox_IdDepartamento.getSelectedItem() == null;
     }
 
-
 }
+
+
+

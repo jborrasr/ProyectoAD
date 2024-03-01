@@ -1,6 +1,13 @@
 package org.example.view;
 
+import org.example.controller.empleadosController;
+import org.example.model.empleados;
+import org.example.util.HibernateUtil;
+
 import javax.swing.*;
+
+import static org.example.util.HibernateUtil.getSessionFactory;
+import static org.example.view.ModificarEmpleados.obtenerEmpleadoSeleccionado;
 
 public class MenuEmpleados extends JDialog {
     private JPanel contentPane;
@@ -9,7 +16,7 @@ public class MenuEmpleados extends JDialog {
     private JButton btnModificarEmpleado;
     private JButton btnVolver;
 
-    public MenuEmpleados() {
+    public MenuEmpleados(empleadosController controller) {
         setContentPane(contentPane);
         setModal(true);
 
@@ -28,12 +35,21 @@ public class MenuEmpleados extends JDialog {
     }
 
     private void abrirMenuModificar() {
-        ModificarEmpleados menuModificar = new ModificarEmpleados();
-        menuModificar.pack();
-        menuModificar.setLocationRelativeTo(null);
-        menuModificar.setVisible(true);
+        empleadosController controller = new empleadosController();
+        empleados empleadoSeleccionado = obtenerEmpleadoSeleccionado();
+
+        if (empleadoSeleccionado != null) {
+            ModificarEmpleados modificarEmpleados = new ModificarEmpleados(controller, empleadoSeleccionado);
+            modificarEmpleados.pack();
+            modificarEmpleados.setLocationRelativeTo(null);
+            modificarEmpleados.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "No se ha seleccionado ningún empleado.");
+        }
     }
+
     private void abrirMenuEliminar() {
+        empleadosController controller = new empleadosController();
         EliminarEmpleado menuEliminar = new EliminarEmpleado();
         menuEliminar.pack();
         menuEliminar.setLocationRelativeTo(null);

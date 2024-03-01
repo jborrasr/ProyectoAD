@@ -14,18 +14,27 @@ public class departamentosController {
 
     private static final SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
+    public List<departamentos> obtenerDepartamentosDesdeBD() {
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "FROM departamentos";
+            Query<departamentos> query = session.createQuery(hql, departamentos.class);
+            return query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Manejo adecuado de excepciones en una aplicación real
+        }
+        return null;
+    }
+
+
+
     public static void insertarDepartamento(departamentos departamento) {
-
-
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = null;
             try {
                 transaction = session.beginTransaction();
-
                 session.save(departamento);
-
                 transaction.commit();
-
                 JOptionPane.showMessageDialog(null, "Departamento insertado correctamente");
             } catch (Exception e) {
                 if (transaction != null) {
@@ -35,11 +44,9 @@ public class departamentosController {
                 JOptionPane.showMessageDialog(null, "Error al insertar el departamento en la base de datos");
             }
         }
-
-
     }
 
-    public static void modificarDepartamento(departamentos departamento) {
+    public void modificarDepartamento(departamentos departamento) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = null;
             try {
@@ -57,14 +64,22 @@ public class departamentosController {
         }
     }
 
-    public static void eliminarDepartamento(departamentos departamento) {
+    public void eliminarDepartamento(departamentos idDepartamento) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = null;
             try {
                 transaction = session.beginTransaction();
-                session.delete(departamento);
-                transaction.commit();
-                JOptionPane.showMessageDialog(null, "Departamento eliminado correctamente");
+
+                // Cargar la entidad desde la base de datos
+                departamentos departamento = session.get(departamentos.class, idDepartamento.getId_Departamento());
+
+                if (departamento != null) {
+                    session.delete(departamento);
+                    transaction.commit();
+                    JOptionPane.showMessageDialog(null, "Departamento eliminado correctamente");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se encontró un departamento con el ID proporcionado");
+                }
             } catch (Exception e) {
                 if (transaction != null) {
                     transaction.rollback();
@@ -73,19 +88,6 @@ public class departamentosController {
                 JOptionPane.showMessageDialog(null, "Error al eliminar el Departamento de la base de datos");
             }
         }
-    }
-
-
-    public List<departamentos> obtenerDepartamentosdesdeBD() {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            String hql = "FROM departamentos ";
-            Query<departamentos> query = session.createQuery(hql, departamentos.class);
-            return query.list();
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-        return null;
     }
 
 }

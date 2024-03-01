@@ -3,11 +3,13 @@ package org.example.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "departamentos")
 public class departamentos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_Departamento")
     private Long id_Departamento;
+
     @Column(name = "nombreDepartamento")
     private String nombreDespartamento;
 
@@ -52,6 +54,10 @@ public class departamentos {
         this.num_Empleados = num_Empleados;
     }
 
+    // Nuevo método setNombre
+    public void setNombre(String nombre) {
+        this.nombreDespartamento = nombre;
+    }
 
     public departamentos(Long id_Departamento, String nombreDespartamento, String ubicacion, int num_Empleados) {
         this.id_Departamento = id_Departamento;
@@ -60,5 +66,11 @@ public class departamentos {
         this.num_Empleados = num_Empleados;
     }
 
+    public String getNombreDepartamento() {
+        return nombreDespartamento;
+    }
 
+    public String getNombre() {
+        return nombreDespartamento;
+    }
 }

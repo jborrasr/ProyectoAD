@@ -1,8 +1,10 @@
 package org.example.model;
 
 import jakarta.persistence.*;
+import org.example.view.Vacaciones;
 
-import java.util.Date;
+import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 public class vacaciones {
@@ -12,15 +14,16 @@ public class vacaciones {
     @Column(name = "id_Vacaciones")
     private Long id_Vacaciones;
     @Column(name = "dia_Vacaciones")
-    private Date dia_Vacaciones;
+    private java.sql.Date dia_Vacaciones;
 
     @ManyToOne
     @JoinColumn(name = "dni")
     private empleados dni;
 
     @ManyToOne
-    @JoinColumn(name = "id_departamento")
+    @JoinColumn(name = "id_departamento", foreignKey = @ForeignKey(name = "FK_vacaciones_departamento"))
     private departamentos id_departamento;
+
 
     public vacaciones() {
     }
@@ -63,4 +66,7 @@ public class vacaciones {
     public void setId_departamento(departamentos id_departamento) {
         this.id_departamento = id_departamento;
     }
+
+
+
 }

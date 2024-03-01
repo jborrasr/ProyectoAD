@@ -1,5 +1,8 @@
 package org.example.view;
 
+import org.example.controller.empleadosController;
+import org.example.util.HibernateUtil;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -46,7 +49,8 @@ public class MenuPrincipal extends JFrame {
 
 
     private void abrirMenuEmpleados() {
-        MenuEmpleados menuEmpleados = new MenuEmpleados();
+        empleadosController controller = new empleadosController();
+        MenuEmpleados menuEmpleados = new MenuEmpleados(controller);
         menuEmpleados.pack();
         menuEmpleados.setLocationRelativeTo(null);
         menuEmpleados.setVisible(true);

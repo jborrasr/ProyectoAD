@@ -20,18 +20,19 @@ public class registros {
     private boolean descanso;
 
     @ManyToOne
-    @JoinColumn(name = "dni")
-    private empleados dni;
+    @JoinColumn(name = "telefono")
+    private empleados telefono;
 
     public registros() {
     }
 
-    public registros(Long id_Registro, Date fecha_Entrada, Date fecha_Salida, boolean descanso, empleados dni) {
+    public registros(Long id_Registro, Date fecha_Entrada, Date fecha_Salida, boolean descanso, empleados telefono) {
         this.id_Registro = id_Registro;
         this.fecha_Entrada = fecha_Entrada;
         this.fecha_Salida = fecha_Salida;
         this.descanso = descanso;
-        this.dni = dni;
+        this.telefono = telefono;
+
     }
 
     public Long getId_Registro() {
@@ -66,11 +67,16 @@ public class registros {
         this.descanso = descanso;
     }
 
-    public empleados getDni() {
-        return dni;
+
+
+
+    public empleados getTelefono() {
+        return telefono;
     }
 
-    public void setDni(empleados dni) {
-        this.dni = dni;
+    public void setTelefono(empleados telefono) {
+        this.telefono = telefono;
     }
+
+
 }

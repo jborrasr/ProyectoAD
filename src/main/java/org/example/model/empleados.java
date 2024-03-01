@@ -2,8 +2,7 @@ package org.example.model;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
 
 @Entity
 public class empleados {
@@ -25,10 +24,10 @@ public class empleados {
     private String telefono;
 
     @Column(name = "fecha_nacimiento")
-    private Date fechaNacimiento;
+    private LocalDate fechaNacimiento;
 
     @Column(name = "fecha_contratacion")
-    private Date fechaContratacion;
+    private LocalDate fechaContratacion;
 
     @Column(name = "salario")
     private double salario;
@@ -37,15 +36,15 @@ public class empleados {
     private String cargo;
 
     @ManyToOne
-    @JoinColumn(name = "id_departamento")
+    @JoinColumn(name = "id_Departamento")
     private departamentos id_departamento;
+
 
 
     public empleados() {
     }
 
-
-    public empleados(Long nif, String nombre, String apellidos, String dni, String telefono, Date fechaNacimiento, Date fechaContratacion, double salario, String cargo, departamentos id_departamento) {
+    public empleados(Long nif, String nombre, String apellidos, String dni, String telefono, LocalDate fechaNacimiento, LocalDate fechaContratacion, double salario, String cargo, departamentos id_departamento) {
         this.nif = nif;
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -98,19 +97,19 @@ public class empleados {
         this.telefono = telefono;
     }
 
-    public Date getFechaNacimiento() {
+    public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public Date getFechaContratacion() {
+    public LocalDate getFechaContratacion() {
         return fechaContratacion;
     }
 
-    public void setFechaContratacion(Date fechaContratacion) {
+    public void setFechaContratacion(LocalDate fechaContratacion) {
         this.fechaContratacion = fechaContratacion;
     }
 
@@ -130,11 +129,16 @@ public class empleados {
         this.cargo = cargo;
     }
 
-    public departamentos getId_departamento() {
-        return id_departamento;
+    public Long getId_departamento() {
+        return id_departamento.getId_Departamento();
     }
 
     public void setId_departamento(departamentos id_departamento) {
         this.id_departamento = id_departamento;
     }
+
+    public String getNombreCompleto() {
+        return nombre + " " + apellidos;
+    }
+
 }
